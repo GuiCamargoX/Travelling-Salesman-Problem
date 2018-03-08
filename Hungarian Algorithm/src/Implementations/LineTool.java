@@ -1,19 +1,21 @@
+package Implementations;
 import Interfaces.Step3;
 
 public class LineTool implements Step3{
-	static int count=0;
+	static int count;
 	static int[][] m2;
 	static int[][] m3;
 	
 	// Cover all zeros in the resulting matrix using a minimum number of horizontal and vertical lines.
 	public static int FindMinimumNumberLines(int[][] m1, int [][]mapLines) {
-    	
-    // m2 max(horizontal,vertical) values, with negative number for
+	count=0;
+    
+	// m2 max(horizontal,vertical) values, with negative number for
     // horizontal, positive for vertical
     m2 = new int[m1.length][m1.length];
 
     // m3 where the line are drawen
-    m3 = new int[m1.length][m1.length];
+    m3 = mapLines;
 
     // loop on zeroes from the input array, and store the max num of zeroes
     // in the m2 array
@@ -33,6 +35,7 @@ public class LineTool implements Step3{
             }
         }
     }
+    
     
     return count;
 	}

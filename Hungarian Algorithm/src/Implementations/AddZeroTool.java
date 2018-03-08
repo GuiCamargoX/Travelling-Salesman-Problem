@@ -1,18 +1,20 @@
+package Implementations;
 import Interfaces.Step4;
 
 public class AddZeroTool implements Step4{
 
 	public static final int INFINITY  = 10000;
 	
-	@Override
-	public void CreateAdditionalZeros(int[][] m, int[][] mapLines) {
+	
+	public static void CreateAdditionalZeros(int[][] m, int[][] mapLines) {
 	
 		int small = FindSmallNumber(m, mapLines);
-	
+		SubtractOrAdd(m, mapLines, small);
+		
 	}
 
 	
-	private int FindSmallNumber(int[][] m, int[][] mapLines) {
+	private static int FindSmallNumber(int[][] m, int[][] mapLines) {
 		int small=INFINITY;
 		
 	    for (int row = 0; row < m.length; row++) {
@@ -27,7 +29,7 @@ public class AddZeroTool implements Step4{
 	}
 
 	
-	public void SubtractOrAdd(int[][] m, int[][] mapLines, int small) {
+	private static void SubtractOrAdd(int[][] m, int[][] mapLines, int small) {
 	
 	//SUBTRACT
 		for (int row = 0; row < m.length; row++) {
@@ -69,16 +71,16 @@ public class AddZeroTool implements Step4{
 	    //SEE 4 vertex
 	    
 	    if(mapLines[0][0]==1 && mapLines[0][1]==1 && mapLines[1][0]==1)
-	    	mapLines[0][0]= mapLines[0][0] + small;
+	    	m[0][0]= m[0][0] + small;
 	    
 	    if(mapLines[last][0]==1 && mapLines[last][1]==1 && mapLines[last-1][0]==1)
-	    	mapLines[last][0]= mapLines[last][0] + small;
+	    	m[last][0]= m[last][0] + small;
 	    
 	    if(mapLines[0][last]==1 && mapLines[0][last-1]==1 && mapLines[1][last]==1)
-	    	mapLines[0][last]= mapLines[0][last] + small;	    
+	    	m[0][last]= m[0][last] + small;	    
 	
 	    if(mapLines[last][last]==1 && mapLines[last][last-1]==1 && mapLines[last-1][last]==1)
-	    	mapLines[last][last]= mapLines[last][last] + small;
+	    	m[last][last]= m[last][last] + small;
 	
 	}
 	
