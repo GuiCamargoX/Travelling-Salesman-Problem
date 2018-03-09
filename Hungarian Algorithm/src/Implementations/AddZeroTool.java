@@ -31,57 +31,47 @@ public class AddZeroTool implements Step4{
 	
 	private static void SubtractOrAdd(int[][] m, int[][] mapLines, int small) {
 	
-	//SUBTRACT
 		for (int row = 0; row < m.length; row++) {
 	        for (int col = 0; col < m.length; col++) {
 	            if ( mapLines[row][col] == 0 )
 	            	m[row][col]= m[row][col] - small;	                
-	        }
-	    }
-		
-	//ADD
-		//SEE INSIDE - CROSS
-		for (int row = 1; row < m.length-1; row++) {
-	        for (int col = 1; col < m.length-1; col++) {
-	            if ( mapLines[row][col] == 1 && mapLines[row-1][col]==1 && mapLines[row+1][col]==1 && mapLines[row][col-1]==1 && mapLines[row][col+1]==1 )
-	            	m[row][col]= m[row][col] + small;         
-	        }
-	    }
-		
-		//SEE borders left - rigth
-		int last=m.length-1;
-		for (int row = 1; row < m.length-1; row++) {
-	            if ( mapLines[row][0] == 1 && mapLines[row-1][0]==1 && mapLines[row+1][0]==1 && mapLines[row][1]==1 )
-	            	m[row][0]= m[row][0] + small;
+	            else{
+	            	if( IsCross(mapLines,row,col) )
+	            		m[row][col]= m[row][col] + small;	
+	            }
 	            
-	            if ( mapLines[row][last] == 1 && mapLines[row-1][last]==1 && mapLines[row+1][last]==1 && mapLines[row][last-1]==1 )
-	            	m[row][last]= m[row][last] + small;
-	    }		
+	        }
+	    }
+		
+	
+	}
+	
+	private static boolean IsCross(int[][]mapLines, int row, int col){		
+		
+		for (int i = 0; i < row; i++) {
+	        if(mapLines[i][col] == 0)
+	        	return false;
+		}		
+		
 
-		//SEE borders up - down
-	    for (int col = 1; col < m.length-1; col++) {
-	            if ( mapLines[0][col] == 1 && mapLines[0][col-1]==1 && mapLines[0][col+1]==1 && mapLines[1][col]==1 )
-	            	m[0][col]= m[0][col] + small;
-	            
-	            if ( mapLines[last][col] == 1 && mapLines[last][col-1]==1 && mapLines[last][col+1]==1 && mapLines[last-1][col]==1 )
-	            	m[last][col]= m[last][col] + small;
-	            
-	    }
-	    
-	    //SEE 4 vertex
-	    
-	    if(mapLines[0][0]==1 && mapLines[0][1]==1 && mapLines[1][0]==1)
-	    	m[0][0]= m[0][0] + small;
-	    
-	    if(mapLines[last][0]==1 && mapLines[last][1]==1 && mapLines[last-1][0]==1)
-	    	m[last][0]= m[last][0] + small;
-	    
-	    if(mapLines[0][last]==1 && mapLines[0][last-1]==1 && mapLines[1][last]==1)
-	    	m[0][last]= m[0][last] + small;	    
-	
-	    if(mapLines[last][last]==1 && mapLines[last][last-1]==1 && mapLines[last-1][last]==1)
-	    	m[last][last]= m[last][last] + small;
-	
+		for (int i = row+1 ; i < mapLines.length; i++) {
+			if(mapLines[i][col] == 0)
+				return false;
+		}
+
+		for (int j = 0 ; j < col; j++) {
+			if(mapLines[row][j] == 0)
+				return false;
+		}
+		
+		
+		for (int j = col+1 ; j < mapLines.length; j++) {
+			if(mapLines[row][j] == 0)
+				return false;
+		}
+		
+		return true;
+		
 	}
 	
 

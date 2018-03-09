@@ -100,7 +100,7 @@ public class SolutionTool implements Step5{
 	    					MarkMap[j][i] = -1;//transp
 	    					fillCross(i,j);
 	    				}else{
-	    					System.out.println(i+ " " +j);
+	    					//System.out.println(i+ " " +j);
 	    					last.setLocation(i, j);
 	    					ItRow.remove();
 	    					
@@ -118,11 +118,10 @@ public class SolutionTool implements Step5{
 		return true;
 	}
 	
-	
 	public List<Point> getSolution(){
 		//convert List<List<Integer>> to List<Point>
-		
 		List<Point> ans= new ArrayList<Point>();
+		
 		Point p = null;
 		
 		for(List<Integer> colun: col ){
@@ -131,13 +130,13 @@ public class SolutionTool implements Step5{
 			p=new Point(linha, col.indexOf(colun) );	
 			}
 			ans.add(p);
-		}		
-		
+		}			
 		return ans;
 	}
 	
 	public Point getLast(){
 		return last;
 	}
+	
 
 }

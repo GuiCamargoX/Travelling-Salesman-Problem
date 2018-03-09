@@ -8,6 +8,8 @@ public interface Hungarian {
 	
 	public void useMethod();//Use hungarian algorithm
 	
-	public void SolveProblemTSP(Point penalth);//Travelling salesman problem
+	public boolean ItWorked();
+	
+	public void SolveProblemTSP();//Travelling salesman problem
 
 }
