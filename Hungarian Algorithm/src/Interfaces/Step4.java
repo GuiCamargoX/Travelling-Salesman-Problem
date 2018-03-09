@@ -6,6 +6,4 @@ public interface Step4 {
 	}
 	
 	
-	public void FindOptimalSolution();
-	
 }
