@@ -10,6 +10,6 @@ public interface Hungarian {
 	
 	public boolean ItWorked();
 	
-	public void SolveProblemTSP();//Travelling salesman problem
+	public void SolveProblemTSP(int iteracoes);//Travelling salesman problem
 
 }

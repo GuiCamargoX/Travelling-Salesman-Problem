@@ -5,6 +5,7 @@ import java.util.List;
 import Implementations.AddZeroTool;
 import Implementations.ColTool;
 import Implementations.LineTool;
+import Implementations.ProblemTSPTool;
 import Implementations.RowTool;
 import Implementations.SolutionTool;
 import Interfaces.Hungarian;
@@ -14,40 +15,34 @@ public class ImpHungarian implements Hungarian{
 	Point ToPenalth;
 	int [][]mapLines;
 	int [][]m;
-	int [][] orig1, orig2;
+	int [][] orig;
 	public static final int INFINITY = 10000;
 	boolean work=false;
 	
 	public ImpHungarian(int[][] m) {
-		this.m = m;
+		this.m = m;                                  // variavel m vai ser utilizada para manipulacao
 		mapLines = new int[m.length][m.length];
-		orig1 =new int[m.length][m.length];
-		orig2 =new int[m.length][m.length];
-		
-		ImpHungarian.arrayCopy(m, orig1);
-		ImpHungarian.arrayCopy(m, orig2);
+		orig =new int[m.length][m.length];           //backup matrix
+
+		ProblemTSPTool.arrayCopy(m, orig);           //backup matrix orig = m
+
 	}
 	
-	public static void arrayCopy(int[][] aSource, int[][] aDestination) {
-	    for (int i = 0; i < aSource.length; i++) {
-	        System.arraycopy(aSource[i], 0, aDestination[i], 0, aSource[i].length);
-	    }
-	}
 
 	
 	@Override
 	public void useMethod() {
 		RowTool.SubtractRowMin(m);
-		Imprime();
+		//Imprime();
 		ColTool.SubtractColumnMin(m);
-		Imprime();
+		//Imprime();
 		
 		int zeros = LineTool.FindMinimumNumberLines(m , mapLines);
-		ImprimeMap();
+		//ImprimeMap();
 		
-		while(zeros < m.length ){/*bug aqui*/
+		while(zeros < m.length ){
 		AddZeroTool.CreateAdditionalZeros(m, mapLines);
-		Imprime();
+		//Imprime();
 		zeros = LineTool.FindMinimumNumberLines(m , mapLines);
 		}
 		
@@ -60,13 +55,86 @@ public class ImpHungarian implements Hungarian{
 			 work= true;
 		}else{
 			ToPenalth = ans.getLast();
-			System.out.println(ToPenalth);
+			//System.out.println(ToPenalth);
 			work= false;
 		}
 		
 		
 	}
 	
+	public int[][] getMatrix1(){
+		return ProblemTSPTool.FirstPass(ToPenalth, orig);
+	}
+	
+	public int[][] getMatrix2(){
+		return ProblemTSPTool.SecondPass(ToPenalth, orig);
+	}
+	
+	@Override
+	public void SolveProblemTSP(int it) { //it representa o numero de iteracoes total caso nao encontre uma respota viavel otima 
+		Integer bestZ = null ;
+		int temp[][], temp2[][];
+		ImpHungarian h1,h2;
+		
+		if( ItWorked() ){
+			bestZ= getZ();
+			return;
+		}
+		
+		temp = getMatrix1();
+		temp2 = getMatrix2();
+		
+		for(int i=0; i< it && bestZ==null ; i++ ){
+            
+        	h1 = new ImpHungarian(temp);
+        	h1.useMethod();
+        	if( h1.ItWorked() ){
+        		bestZ= h1.getZ();
+        	}else{
+        		temp = h1.getMatrix1();
+        	}
+        	
+        	
+        	h2 = new ImpHungarian(temp2);
+        	h2.useMethod();
+        	Imprime();
+        	if( h2.ItWorked() ){
+        		int z = h2.getZ();
+        		
+        			if( bestZ == null || z < bestZ )
+        				bestZ=z;
+			}else{
+        		temp2 = h2.getMatrix2();
+        	}
+        	
+    		
+        }
+		
+			
+		System.out.println("\n"+bestZ);
+		
+	}
+
+	
+
+	@Override
+	public boolean ItWorked() {
+		return work;
+	}
+	
+	public int getZ(){
+		int z=0;
+
+		for(Point a: path){
+			z+= orig[(int) a.getX()][ (int) a.getY()];
+		}
+		
+		return z;
+	}
+	
+	
+	
+	//IMPRESOS
 	public void Imprime(){
         for (int row = 0; row < m.length; row++) {
             for (int col = 0; col < m.length; col++) {
@@ -86,70 +154,6 @@ public class ImpHungarian implements Hungarian{
         }
         System.out.println();
 	}	
-	
-	@Override
-	public void SolveProblemTSP() {
-		// two steps
-		
-	}
-	
-	public void FirstPass(){
-		int row= (int) ToPenalth.getX();
-		int col= (int) ToPenalth.getY();
-		
-		//Cross
-		for (int i = 0; i < row; i++) {
-	        orig1[i][col]= INFINITY;
-		}		
-		
-
-		for (int i = row+1 ; i < m.length; i++) {
-			orig1[i][col]= INFINITY;
-		}
-
-		for (int j = 0 ; j < col; j++) {
-			orig1[row][j]= INFINITY;
-		}
-		
-		
-		for (int j = col+1 ; j < m.length; j++) {
-			orig1[row][j]= INFINITY;
-		}
-		
-		orig1[col][row]= INFINITY; //Transposta
-		
-	}
-	
-	public void SecondPass(){
-		int row= (int) ToPenalth.getX();
-		int col= (int) ToPenalth.getY();
-		
-		orig2[row][col]= INFINITY;
-	}
-	
-	public int [][] getMatrix2(){
-		return orig2;
-	}
-
-
-	@Override
-	public boolean ItWorked() {
-		return work;
-	}
-	
-	public int getZ(){
-		int z=0;
-
-		for(Point a: path){
-			z+= orig1[(int) a.getX()][ (int) a.getY()];
-		}
-		
-		return z;
-	}
-	
-	public int [][] getMatrix(){
-		return orig1;
-	}
 	
 	 
 }
