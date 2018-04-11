@@ -3,7 +3,7 @@ import Interfaces.Step4;
 
 public class AddZeroTool implements Step4{
 
-	public static final int INFINITY  = 10000;
+	public static final int INFINITY  = 100000;
 	
 	
 	public static void CreateAdditionalZeros(int[][] m, int[][] mapLines) {

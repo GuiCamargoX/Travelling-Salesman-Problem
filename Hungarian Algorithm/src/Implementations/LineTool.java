@@ -16,6 +16,7 @@ public class LineTool implements Step3{
 
     // m3 where the line are drawen
     m3 = mapLines;
+    clearMapLines();
 
     // loop on zeroes from the input array, and store the max num of zeroes
     // in the m2 array
@@ -84,6 +85,16 @@ public class LineTool implements Step3{
         }
        }
     
+    }
+    
+    private static void clearMapLines(){
+		
+        for (int row = 0; row < m3.length; row++) {
+            for (int col = 0; col < m3.length; col++) {
+                m3[row][col]=0 ;
+            }
+        }
+
     }
 
 

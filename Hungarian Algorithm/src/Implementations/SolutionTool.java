@@ -82,8 +82,9 @@ public class SolutionTool implements Step5{
 		
 		
 	    for(int k=1; k<=m.length ; k++){ //utilizar Iterator 
+	    	int IndexCol=0;
 	    	
-	    	for( Iterator< List<Integer> > Itcol = col.iterator() ; Itcol.hasNext(); ){
+	    	for( Iterator< List<Integer> > Itcol = col.iterator() ; Itcol.hasNext(); IndexCol++){
 	    		List<Integer> colun = Itcol.next();
 	    		
 	    		if(colun.size() == k){
@@ -92,7 +93,7 @@ public class SolutionTool implements Step5{
 	    				Integer linha = ItRow.next();
 	    				
     					int i=linha;
-    					int j=col.indexOf(colun);
+    					int j= IndexCol;
     					
 	    				if(MarkMap[i][j] == 0){
 	    					//System.out.println(i+ " " +j);
