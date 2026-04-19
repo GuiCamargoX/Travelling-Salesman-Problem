@@ -1,40 +1,10 @@
 # Travelling Salesman Problem (Hungarian Method Study Project)
 
-This repository is a small Java project used to study a Hungarian-method-based approach for assignment and a branching strategy for the Travelling Salesman Problem (TSP).
-
-## What is implemented
-
-- A step-by-step Hungarian reduction flow:
-  1. row reduction
-  2. column reduction
-  3. minimum-line cover over zeros
-  4. extra-zero creation when needed
-  5. feasibility check and route extraction
-- A branching loop (`SolveProblemTSP`) that explores penalized matrices and keeps the best feasible route found.
-- LaTeX-friendly console output so each matrix transformation can be copied into reports.
-
-## Why this design
-
-- Each Hungarian step lives in its own utility class under `src/Implementations/`.
-- `src/Control/ImpHungarian.java` orchestrates the full flow, so beginners can follow one main class first.
-- `src/Main/Main.java` uses a hardcoded matrix to make the project runnable with zero setup.
-
-## Tradeoffs
-
-- Easy to run and inspect, but no automated tests yet.
-- Output is verbose (good for learning), but not optimized for production logs.
-- Uses integer sentinel values for "infinity" (simple, but must stay consistent when refactoring).
-
-## Project shape
-
-- Entry point: `Hungarian Algorithm/src/Main/Main.java`
-- Solver orchestration: `Hungarian Algorithm/src/Control/ImpHungarian.java`
-- Algorithm steps: `Hungarian Algorithm/src/Implementations/*.java`
-- Contracts/placeholders: `Hungarian Algorithm/src/Interfaces/*.java`
+This repository is a beginner-friendly Java project that demonstrates a Hungarian-method workflow and a branching strategy for the Travelling Salesman Problem (TSP).
 
 ## Quick start
 
-From the repository root:
+From repository root:
 
 ```bash
 ./scripts/build.sh
@@ -42,7 +12,7 @@ From the repository root:
 ./scripts/clean.sh
 ```
 
-Manual commands (same behavior as the scripts):
+Manual equivalent:
 
 ```bash
 cd "Hungarian Algorithm"
@@ -51,15 +21,25 @@ javac -encoding ISO-8859-1 -d bin src/Interfaces/*.java src/Implementations/*.ja
 java -cp bin Main.Main
 ```
 
-## Common beginner mistakes
+## Project map
 
-- Running from the wrong directory. Compile and run from `Hungarian Algorithm/`.
-- Forgetting quoted paths when working from the repository root (it contains spaces).
-- Changing sentinel values (`100000` and `10000`) without understanding branching impact.
+- Entry point: `Hungarian Algorithm/src/Main/Main.java`
+- Demo matrices: `Hungarian Algorithm/src/Main/ExampleMatrices.java`
+- Solver orchestration: `Hungarian Algorithm/src/Control/ImpHungarian.java`
+- Output/report formatting: `Hungarian Algorithm/src/Control/HungarianLatexReporter.java`
+- Algorithm steps: `Hungarian Algorithm/src/Implementations/*.java`
 
-## Safe refactor workflow
+## Learning docs
 
-1. Compile and run once before changes.
-2. Make one small refactor.
-3. Re-compile and run the same matrix.
-4. Compare route/cost behavior, not only text output formatting.
+- Concepts and algorithm flow: `docs/HOW_IT_WORKS.md`
+
+## Smoke verification
+
+- Build must succeed.
+- Run must finish and print feasibility messages and a final best-route section (`Z*=` output).
+
+## Important notes
+
+- Call order is required: `runHungarianMethod()` before `solveProblemTsp(...)`.
+- Matrix operations assume square matrices.
+- Sentinel penalty values are behavior-critical (`100000` and `10000`).
