@@ -37,16 +37,18 @@ This repository is a small Java project used to study a Hungarian-method-based a
 From the repository root:
 
 ```bash
-cd "Hungarian Algorithm"
-mkdir -p bin
-javac -d bin src/Interfaces/*.java src/Implementations/*.java src/Control/*.java src/Main/*.java
-java -cp bin Main.Main
+./scripts/build.sh
+./scripts/run.sh --skip-build
+./scripts/clean.sh
 ```
 
-If your default terminal encoding is UTF-8, compile with explicit source encoding:
+Manual commands (same behavior as the scripts):
 
 ```bash
+cd "Hungarian Algorithm"
+mkdir -p bin
 javac -encoding ISO-8859-1 -d bin src/Interfaces/*.java src/Implementations/*.java src/Control/*.java src/Main/*.java
+java -cp bin Main.Main
 ```
 
 ## Common beginner mistakes
