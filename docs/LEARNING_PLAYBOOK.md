@@ -1,8 +1,8 @@
-# Learning Playbook
+# 🧪 Learning Playbook
 
-## Correct usage examples
+## ✅ Correct usage examples
 
-### Run the default 5-city example
+### ▶️ Run the default 5-city example
 
 ```bash
 ./scripts/build.sh
@@ -14,7 +14,7 @@ Expected outcome:
 - feasibility lines (`The solution above is ...`)
 - final best route section with `Z*=`
 
-### Try another matrix safely
+### 🔁 Try another matrix safely
 
 1. Open `Hungarian Algorithm/src/Main/Main.java`.
 2. Replace:
@@ -31,7 +31,7 @@ int[][] matrix = ExampleMatrices.sixCityDistanceDemoMatrix();
 
 3. Run build and run again.
 
-## Common mistakes
+## 🚫 Common mistakes
 
 - Calling `solveProblemTsp(...)` before `runHungarianMethod()`.
   - Why it fails: branching depends on state set by the first call.
@@ -42,7 +42,7 @@ int[][] matrix = ExampleMatrices.sixCityDistanceDemoMatrix();
 - Committing generated `bin/` classes.
   - Why it fails: noisy diffs and non-source artifacts in history.
 
-## Safe refactor workflow
+## 🛠️ Safe refactor workflow
 
 1. Run baseline smoke test and capture final route/cost.
 2. Make one small change only.
@@ -50,7 +50,7 @@ int[][] matrix = ExampleMatrices.sixCityDistanceDemoMatrix();
 4. Compare behavior (feasible/not feasible transitions and final `Z*`).
 5. Commit only when behavior is unchanged (unless behavior change was intentional).
 
-## Debugging checklist
+## 🩺 Debugging checklist
 
 - Did compilation succeed with `./scripts/build.sh`?
 - Does output still include feasibility messages?
