@@ -32,6 +32,7 @@ java -cp bin Main.Main
 ## Learning docs
 
 - Concepts and algorithm flow: `docs/HOW_IT_WORKS.md`
+- Hands-on examples and checklists: `docs/LEARNING_PLAYBOOK.md`
 
 ## Smoke verification
 
