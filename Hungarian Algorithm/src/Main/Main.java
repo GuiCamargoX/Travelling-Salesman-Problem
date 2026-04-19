@@ -33,8 +33,8 @@ public class Main {
 			 };
 		
 	        ImpHungarian h= new ImpHungarian(m1);
-	        h.useMethod();
-	        h.SolveProblemTSP(6); // segundo nivel mais terceiro nivel => 2^1 + 2^2
+	        h.runHungarianMethod();
+	        h.solveProblemTsp(6); // second and third level => 2^1 + 2^2
 
 	        
 	 
