@@ -19,6 +19,7 @@ public class ImpHungarian implements Hungarian {
 	private final int[][] lineMap;
 	private final int[][] workingMatrix;
 	private final int[][] originalMatrix;
+	private final HungarianLatexReporter reporter;
 	public static final int INFINITY = 100000;
 	private boolean worked = false;
 
@@ -26,37 +27,37 @@ public class ImpHungarian implements Hungarian {
 		this.workingMatrix = matrix;
 		lineMap = new int[matrix.length][matrix.length];
 		originalMatrix = new int[matrix.length][matrix.length];
+		reporter = new HungarianLatexReporter();
 
 		ProblemTSPTool.arrayCopy(matrix, originalMatrix);
 	}
 
 	@Override
 	public void runHungarianMethod() {
-		printInitialMatrix();
+		reporter.printInitialMatrix(workingMatrix);
 
 		RowTool.subtractRowMin(workingMatrix);
-		printAfterRowReduction();
+		reporter.printAfterRowReduction(workingMatrix);
 		ColTool.subtractColumnMin(workingMatrix);
 
 		int zeroLines = LineTool.findMinimumNumberOfLines(workingMatrix, lineMap);
-		printAfterColumnReductionAndLineMap(zeroLines);
+		reporter.printAfterColumnReductionAndLineMap(workingMatrix, lineMap, zeroLines);
 
 		while (zeroLines < workingMatrix.length) {
 			AddZeroTool.createAdditionalZeros(workingMatrix, lineMap);
 			zeroLines = LineTool.findMinimumNumberOfLines(workingMatrix, lineMap);
-			printAfterAdditionalZeroStep(zeroLines);
+			reporter.printAfterAdditionalZeroStep(workingMatrix, lineMap, zeroLines);
 		}
 
 		SolutionTool solutionTool = new SolutionTool(workingMatrix);
 
 		if (solutionTool.isFeasible()) {
 			path = solutionTool.getSolution();
-			System.out.println("The solution above is feasible!     Route found: " + formatPath(path) + "   Z*= " + getObjectiveCost());
+			reporter.printFeasibleSolution(path, getObjectiveCost());
 			worked = true;
 		} else {
 			pointToPenalize = solutionTool.getLastRejectedPoint();
-			System.out.println("The solution above is NOT feasible! Penalizing $C_{" + (int) pointToPenalize.getX() + " , "
-					+ (int) pointToPenalize.getY() + "}$");
+			reporter.printInfeasibleSolution(pointToPenalize);
 			worked = false;
 		}
 	}
@@ -92,32 +93,28 @@ public class ImpHungarian implements Hungarian {
 		queue.add(temp2);
 
 		for (int i = 0; i < iterations && !queue.isEmpty(); i++) {
-			if (!queue.isEmpty()) {
-				matrix = queue.poll();
+			matrix = queue.poll();
 
-				solver = new ImpHungarian(matrix);
-				solver.runHungarianMethod();
+			solver = new ImpHungarian(matrix);
+			solver.runHungarianMethod();
 
-				if (solver.itWorked()) {
-					z = solver.getObjectiveCost();
+			if (solver.itWorked()) {
+				z = solver.getObjectiveCost();
 
-					if (bestZ == null || z < bestZ) {
-						bestZ = z;
-						bestPath = solver.getPath();
-					}
-
-				} else {
-					temp = solver.getFirstPenaltyMatrix();
-					temp2 = solver.getSecondPenaltyMatrix();
-					queue.add(temp);
-					queue.add(temp2);
+				if (bestZ == null || z < bestZ) {
+					bestZ = z;
+					bestPath = solver.getPath();
 				}
+			} else {
+				temp = solver.getFirstPenaltyMatrix();
+				temp2 = solver.getSecondPenaltyMatrix();
+				queue.add(temp);
+				queue.add(temp2);
 			}
 		}
 
 		if (bestZ != null) {
-			System.out.println("\\\\\\\\textbf{Best Route, with Z*=" + bestZ);
-			System.out.println("\\\\Route found: " + formatPath(bestPath) + "}");
+			reporter.printBestRoute(bestZ, bestPath);
 		}
 	}
 
@@ -138,121 +135,5 @@ public class ImpHungarian implements Hungarian {
 
 	public List<Point> getPath() {
 		return path;
-	}
-
-	public String formatPath(List<Point> points) {
-		String route = "";
-
-		for (Point point : points) {
-			route += "\\\\" + (int) point.getX() + " $\\rightarrow$ " + (int) point.getY() + " ;";
-		}
-
-		return route;
-	}
-
-	private void printInitialMatrix() {
-		System.out.println("\\begin{table}[H]\n\\centering\n\n" + "\\begin{tabular}{|c|c|c|c|c|}\n\n\\hline");
-
-		for (int row = 0; row < workingMatrix.length; row++) {
-			for (int col = 0; col < workingMatrix.length; col++) {
-				System.out.print(workingMatrix[row][col]);
-				if (col < workingMatrix.length - 1) {
-					System.out.print(" & ");
-				}
-			}
-			System.out.println("\\\\ \\hline");
-		}
-
-		System.out.println("\n\\end{tabular}" + "\n\n\\end{table}\n");
-	}
-
-	private void printAfterRowReduction() {
-		System.out.println("\\begin{table}[H]\n\\centering\n\n" + "\\begin{tabular}{|c|c|c|c|c|}\n\n\\hline");
-
-		for (int row = 0; row < workingMatrix.length; row++) {
-			for (int col = 0; col < workingMatrix.length; col++) {
-				System.out.print(workingMatrix[row][col]);
-				if (col < workingMatrix.length - 1) {
-					System.out.print(" & ");
-				}
-			}
-			System.out.println("\\\\ \\hline");
-		}
-
-		System.out.println("\n\\end{tabular}" + "\n\\\\Subtract row minimum\n\\end{table}\n");
-	}
-
-	private void printAfterColumnReductionAndLineMap(int lineCount) {
-		System.out.println("\\begin{table}[H]\n\\centering\n\n" + "\\begin{minipage}{0.4\\textwidth}\n\\centering\n\n"
-				+ "\\begin{tabular}{|c|c|c|c|c|}\n\n\\hline");
-
-		for (int row = 0; row < workingMatrix.length; row++) {
-			for (int col = 0; col < workingMatrix.length; col++) {
-				System.out.print(workingMatrix[row][col]);
-				if (col < workingMatrix.length - 1) {
-					System.out.print(" & ");
-				}
-			}
-			System.out.println("\\\\ \\hline");
-		}
-
-		System.out.println("\n\\end{tabular}" + "\n\\\\Subtract column minimum\n" + "\\end{minipage}");
-
-		System.out.println("\\begin{minipage}{0.4\\textwidth}\n\\centering\n\n" + "\\begin{tabular}{|c|c|c|c|c|}\n\n\\hline");
-
-		for (int row = 0; row < workingMatrix.length; row++) {
-			for (int col = 0; col < workingMatrix.length; col++) {
-				if (lineMap[row][col] == 1) {
-					System.out.print("\\textbf{" + lineMap[row][col] + "}");
-				} else {
-					System.out.print(lineMap[row][col]);
-				}
-
-				if (col < workingMatrix.length - 1) {
-					System.out.print(" & ");
-				}
-			}
-			System.out.println("\\\\ \\hline");
-		}
-
-		System.out.println("\n\\end{tabular}" + "\n\\\\Line map: " + lineCount + "\n\\end{minipage}\n" + "\n\\end{table}\n");
-	}
-
-	private void printAfterAdditionalZeroStep(int lineCount) {
-		System.out.println("\\begin{table}[H]\n\\centering\n\n" + "\\begin{minipage}{0.4\\textwidth}\n\\centering\n\n"
-				+ "\\begin{tabular}{|c|c|c|c|c|}\n\n\\hline");
-
-		for (int row = 0; row < workingMatrix.length; row++) {
-			for (int col = 0; col < workingMatrix.length; col++) {
-				System.out.print(workingMatrix[row][col]);
-				if (col < workingMatrix.length - 1) {
-					System.out.print(" & ");
-				}
-			}
-			System.out.println("\\\\ \\hline");
-		}
-
-		System.out.println("\n\\end{tabular}"
-				+ "\n\\\\Subtract this number from all uncovered elements and add it to all elements that are covered twice. \n"
-				+ "\\end{minipage}");
-
-		System.out.println("\\begin{minipage}{0.4\\textwidth}\n\\centering\n\n" + "\\begin{tabular}{|c|c|c|c|c|}\n\n\\hline");
-
-		for (int row = 0; row < workingMatrix.length; row++) {
-			for (int col = 0; col < workingMatrix.length; col++) {
-				if (lineMap[row][col] == 1) {
-					System.out.print("\\textbf{" + lineMap[row][col] + "}");
-				} else {
-					System.out.print(lineMap[row][col]);
-				}
-
-				if (col < workingMatrix.length - 1) {
-					System.out.print(" & ");
-				}
-			}
-			System.out.println("\\\\ \\hline");
-		}
-
-		System.out.println("\n\\end{tabular}" + "\n\\\\Line map: " + lineCount + "\n\\end{minipage}\n" + "\n\\end{table}\n");
 	}
 }
