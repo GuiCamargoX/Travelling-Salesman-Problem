@@ -31,8 +31,17 @@ java -cp bin Main.Main
 
 ## 📚 Learning docs
 
+- Theory and key ideas first: `docs/HUNGARIAN_THEORY.md`
+- Step-by-step worked example: `docs/HUNGARIAN_STEP_BY_STEP.md`
+- Why TSP is famous and how this repo approaches it: `docs/TSP_INTRO.md`
 - Concepts and algorithm flow: `docs/HOW_IT_WORKS.md`
 - Hands-on examples and checklists: `docs/LEARNING_PLAYBOOK.md`
+
+## 🧑‍🏫 Lesson plan
+
+- **30 minutes (quick intuition):** read `docs/TSP_INTRO.md` and `docs/HUNGARIAN_THEORY.md`, then run `./scripts/build.sh` and `./scripts/run.sh --skip-build`.
+- **2 hours (guided practice):** complete `docs/HUNGARIAN_STEP_BY_STEP.md`, then switch matrix in `Hungarian Algorithm/src/Main/Main.java` using `ExampleMatrices` and compare final `Z*`.
+- **Deep dive (implementation focus):** trace `runHungarianMethod()` in `Hungarian Algorithm/src/Control/ImpHungarian.java` and map each stage to the corresponding tool class in `Hungarian Algorithm/src/Implementations/`.
 
 ## ✅ Smoke verification
 

@@ -26,13 +26,13 @@ java -cp bin Main.Main
 
 ## Critical coupling (easy to break)
 
-- Call order matters: `useMethod()` must run before `SolveProblemTSP(...)`.
-- Branching in `SolveProblemTSP` depends on state set by `useMethod()` (`path`, `ToPenalth`, `work`).
+- Call order matters: `runHungarianMethod()` must run before `solveProblemTsp(...)`.
+- Branching in `solveProblemTsp(...)` depends on state set by `runHungarianMethod()` (`path`, `pointToPenalize`, `worked`).
 - Sentinel "infinity" values are behavior-critical:
   - `ImpHungarian.INFINITY = 100000`
   - `ProblemTSPTool.INFINITY = 10000`
 - Matrix operations assume square matrices (`m.length` used for row and column loops).
-- `LineTool` uses static mutable state (`count`, `m2`, `m3`) and is not concurrency-safe.
+- `LineTool` uses static mutable state (`count`, `coverageScoreMap`, `lineMap`) and is not concurrency-safe.
 
 ## Verification (smoke level)
 
