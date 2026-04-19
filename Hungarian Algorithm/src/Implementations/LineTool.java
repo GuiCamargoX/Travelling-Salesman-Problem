@@ -1,101 +1,83 @@
 package Implementations;
+
 import Interfaces.Step3;
 
-public class LineTool implements Step3{
-	static int count;
-	static int[][] m2;
-	static int[][] m3;
-	
-	// Cover all zeros in the resulting matrix using a minimum number of horizontal and vertical lines.
-	public static int FindMinimumNumberLines(int[][] m1, int [][]mapLines) {
-	count=0;
-    
-	// m2 max(horizontal,vertical) values, with negative number for
-    // horizontal, positive for vertical
-    m2 = new int[m1.length][m1.length];
+public class LineTool implements Step3 {
+	private static int count;
+	private static int[][] coverageScoreMap;
+	private static int[][] lineMap;
 
-    // m3 where the line are drawen
-    m3 = mapLines;
-    clearMapLines();
+	public static int findMinimumNumberOfLines(int[][] matrix, int[][] mapLines) {
+		count = 0;
+		coverageScoreMap = new int[matrix.length][matrix.length];
+		lineMap = mapLines;
+		clearLineMap();
 
-    // loop on zeroes from the input array, and store the max num of zeroes
-    // in the m2 array
-    for (int row = 0; row < m1.length; row++) {
-        for (int col = 0; col < m1.length; col++) {
-            if (m1[row][col] == 0)
-                m2[row][col] = hvMax(m1, row, col);
-        }
-    }
+		for (int row = 0; row < matrix.length; row++) {
+			for (int col = 0; col < matrix.length; col++) {
+				if (matrix[row][col] == 0) {
+					coverageScoreMap[row][col] = getMaxZeroDirectionScore(matrix, row, col);
+				}
+			}
+		}
 
+		for (int row = 0; row < matrix.length; row++) {
+			for (int col = 0; col < matrix.length; col++) {
+				if (Math.abs(coverageScoreMap[row][col]) > 0) {
+					clearNeighbors(coverageScoreMap, lineMap, row, col);
+				}
+			}
+		}
 
-    // Loop on m2 elements, clear neighbours and draw the lines
-    for (int row = 0; row < m1.length; row++) {
-        for (int col = 0; col < m1.length; col++) {
-            if (Math.abs(m2[row][col]) > 0) {
-                clearNeighbours(m2, m3, row, col);
-            }
-        }
-    }
-    
-    
-    return count;
+		return count;
 	}
 
-// max of vertical vs horizontal at index row col
-    private static int hvMax(int[][] m1, int row, int col) {
-    int vertical = 0;
-    int horizontal = 0;
+	private static int getMaxZeroDirectionScore(int[][] matrix, int row, int col) {
+		int vertical = 0;
+		int horizontal = 0;
 
-    // check horizontal
-    for (int i = 0; i < m1.length; i++) {
-        if (m1[row][i] == 0)
-            horizontal++;
-    }
+		for (int i = 0; i < matrix.length; i++) {
+			if (matrix[row][i] == 0) {
+				horizontal++;
+			}
+		}
 
-    // check vertical
-    for (int i = 0; i < m1.length; i++) {
-        if (m1[i][col] == 0)
-            vertical++;
-    }
+		for (int i = 0; i < matrix.length; i++) {
+			if (matrix[i][col] == 0) {
+				vertical++;
+			}
+		}
 
-    // negative for horizontal, positive for vertical
-    return vertical > horizontal ? vertical : horizontal * -1;
-    }
+		return vertical > horizontal ? vertical : horizontal * -1;
+	}
 
-// clear the neighbors of the picked largest value, the sign will let the
-// app decide which direction to clear
-    private static void clearNeighbours(int[][] m2, int[][] m3, int row, int col) {
-    
-	if(m2[row][col] != 0){
-          count++;
-    }	        
-	
-	// if vertical
-    if (m2[row][col] > 0) {
-        for (int i = 0; i < m2.length; i++) {
-            if (m2[i][col] > 0)
-                m2[i][col] = 0; // clear neigbor
-            m3[i][col] = 1; // draw line
-        }
-    } else {
-        for (int i = 0; i < m2.length; i++) {
-            if (m2[row][i] < 0)
-                m2[row][i] = 0; // clear neigbor
-            m3[row][i] = 1; // draw line
-        }
-       }
-    
-    }
-    
-    private static void clearMapLines(){
-		
-        for (int row = 0; row < m3.length; row++) {
-            for (int col = 0; col < m3.length; col++) {
-                m3[row][col]=0 ;
-            }
-        }
+	private static void clearNeighbors(int[][] coverageScoreMap, int[][] lineMap, int row, int col) {
+		if (coverageScoreMap[row][col] != 0) {
+			count++;
+		}
 
-    }
+		if (coverageScoreMap[row][col] > 0) {
+			for (int i = 0; i < coverageScoreMap.length; i++) {
+				if (coverageScoreMap[i][col] > 0) {
+					coverageScoreMap[i][col] = 0;
+				}
+				lineMap[i][col] = 1;
+			}
+		} else {
+			for (int i = 0; i < coverageScoreMap.length; i++) {
+				if (coverageScoreMap[row][i] < 0) {
+					coverageScoreMap[row][i] = 0;
+				}
+				lineMap[row][i] = 1;
+			}
+		}
+	}
 
-
+	private static void clearLineMap() {
+		for (int row = 0; row < lineMap.length; row++) {
+			for (int col = 0; col < lineMap.length; col++) {
+				lineMap[row][col] = 0;
+			}
+		}
+	}
 }

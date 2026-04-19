@@ -1,12 +1,11 @@
 package Interfaces;
 
 public interface FinalStep {
-	public static void FirstPass(){
-		
+	public static void firstPass() {
+
 	}
-	
-	public static void SecondPass(){
-		
+
+	public static void secondPass() {
+
 	}
-	
 }

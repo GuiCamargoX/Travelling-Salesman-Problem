@@ -1,78 +1,67 @@
 package Implementations;
+
 import Interfaces.Step4;
 
-public class AddZeroTool implements Step4{
+public class AddZeroTool implements Step4 {
 
-	public static final int INFINITY  = 100000;
-	
-	
-	public static void CreateAdditionalZeros(int[][] m, int[][] mapLines) {
-	
-		int small = FindSmallNumber(m, mapLines);
-		SubtractOrAdd(m, mapLines, small);
-		
+	public static final int INFINITY = 100000;
+
+	public static void createAdditionalZeros(int[][] matrix, int[][] lineMap) {
+		int smallestUncovered = findSmallestUncoveredValue(matrix, lineMap);
+		subtractOrAdd(matrix, lineMap, smallestUncovered);
 	}
 
-	
-	private static int FindSmallNumber(int[][] m, int[][] mapLines) {
-		int small=INFINITY;
-		
-	    for (int row = 0; row < m.length; row++) {
-	        for (int col = 0; col < m.length; col++) {
-	            if (mapLines[row][col] == 0 &&  m[row][col] < small )
-	            	small= m[row][col];
-	                
-	        }
-	    }
-	    
+	private static int findSmallestUncoveredValue(int[][] matrix, int[][] lineMap) {
+		int small = INFINITY;
+
+		for (int row = 0; row < matrix.length; row++) {
+			for (int col = 0; col < matrix.length; col++) {
+				if (lineMap[row][col] == 0 && matrix[row][col] < small) {
+					small = matrix[row][col];
+				}
+			}
+		}
+
 		return small;
 	}
 
-	
-	private static void SubtractOrAdd(int[][] m, int[][] mapLines, int small) {
-	
-		for (int row = 0; row < m.length; row++) {
-	        for (int col = 0; col < m.length; col++) {
-	            if ( mapLines[row][col] == 0 )
-	            	m[row][col]= m[row][col] - small;	                
-	            else{
-	            	if( IsCross(mapLines,row,col) )
-	            		m[row][col]= m[row][col] + small;	
-	            }
-	            
-	        }
-	    }
-		
-	
+	private static void subtractOrAdd(int[][] matrix, int[][] lineMap, int small) {
+		for (int row = 0; row < matrix.length; row++) {
+			for (int col = 0; col < matrix.length; col++) {
+				if (lineMap[row][col] == 0) {
+					matrix[row][col] = matrix[row][col] - small;
+				} else if (isCross(lineMap, row, col)) {
+					matrix[row][col] = matrix[row][col] + small;
+				}
+			}
+		}
 	}
-	
-	private static boolean IsCross(int[][]mapLines, int row, int col){		
-		
+
+	private static boolean isCross(int[][] lineMap, int row, int col) {
 		for (int i = 0; i < row; i++) {
-	        if(mapLines[i][col] == 0)
-	        	return false;
-		}		
-		
-
-		for (int i = row+1 ; i < mapLines.length; i++) {
-			if(mapLines[i][col] == 0)
+			if (lineMap[i][col] == 0) {
 				return false;
+			}
 		}
 
-		for (int j = 0 ; j < col; j++) {
-			if(mapLines[row][j] == 0)
+		for (int i = row + 1; i < lineMap.length; i++) {
+			if (lineMap[i][col] == 0) {
 				return false;
+			}
 		}
-		
-		
-		for (int j = col+1 ; j < mapLines.length; j++) {
-			if(mapLines[row][j] == 0)
+
+		for (int j = 0; j < col; j++) {
+			if (lineMap[row][j] == 0) {
 				return false;
+			}
 		}
-		
+
+		for (int j = col + 1; j < lineMap.length; j++) {
+			if (lineMap[row][j] == 0) {
+				return false;
+			}
+		}
+
 		return true;
-		
 	}
-	
-
 }

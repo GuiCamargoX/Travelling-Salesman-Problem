@@ -1,9 +1,7 @@
 package Interfaces;
 
-public interface Step4 {	
-	
-	public static void CreateAdditionalZeros(int [][]m, int [][]mapLines) {
+public interface Step4 {
+
+	public static void createAdditionalZeros(int[][] matrix, int[][] mapLines) {
 	}
-	
-	
 }

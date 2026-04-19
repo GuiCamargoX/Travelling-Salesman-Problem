@@ -34,16 +34,16 @@ public class ImpHungarian implements Hungarian {
 	public void runHungarianMethod() {
 		printInitialMatrix();
 
-		RowTool.SubtractRowMin(workingMatrix);
+		RowTool.subtractRowMin(workingMatrix);
 		printAfterRowReduction();
-		ColTool.SubtractColumnMin(workingMatrix);
+		ColTool.subtractColumnMin(workingMatrix);
 
-		int zeroLines = LineTool.FindMinimumNumberLines(workingMatrix, lineMap);
+		int zeroLines = LineTool.findMinimumNumberOfLines(workingMatrix, lineMap);
 		printAfterColumnReductionAndLineMap(zeroLines);
 
 		while (zeroLines < workingMatrix.length) {
-			AddZeroTool.CreateAdditionalZeros(workingMatrix, lineMap);
-			zeroLines = LineTool.FindMinimumNumberLines(workingMatrix, lineMap);
+			AddZeroTool.createAdditionalZeros(workingMatrix, lineMap);
+			zeroLines = LineTool.findMinimumNumberOfLines(workingMatrix, lineMap);
 			printAfterAdditionalZeroStep(zeroLines);
 		}
 
@@ -62,11 +62,11 @@ public class ImpHungarian implements Hungarian {
 	}
 
 	public int[][] getFirstPenaltyMatrix() {
-		return ProblemTSPTool.FirstPass(pointToPenalize, originalMatrix);
+		return ProblemTSPTool.firstPass(pointToPenalize, originalMatrix);
 	}
 
 	public int[][] getSecondPenaltyMatrix() {
-		return ProblemTSPTool.SecondPass(pointToPenalize, originalMatrix);
+		return ProblemTSPTool.secondPass(pointToPenalize, originalMatrix);
 	}
 
 	@Override

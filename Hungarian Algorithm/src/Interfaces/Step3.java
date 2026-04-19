@@ -1,8 +1,8 @@
 package Interfaces;
 
 public interface Step3 {
-	
-	public static int FindMinimumNumberLines(int [][]m1, int [][]mapLines) {
+
+	public static int findMinimumNumberOfLines(int[][] matrix, int[][] mapLines) {
 		return 0 ;
 	}
 
